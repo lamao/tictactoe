@@ -1,1 +1,1 @@
-insert into game (id, name) values (1, 'First game'), (2, 'The second one'), (3, 'The third');
+insert into game (id, title) values (1, 'First game'), (2, 'The second one'), (3, 'The third');
