@@ -5,7 +5,11 @@ package org.vmis.task.dto.converter;
  */
 public interface Converter<MODEL, DTO> {
 
-    DTO toDto(MODEL model);
+    default DTO toDto(MODEL model) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 
-    MODEL fromDto(DTO dto);
+    default MODEL fromDto(DTO dto) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 }

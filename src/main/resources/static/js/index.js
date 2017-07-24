@@ -12,7 +12,7 @@ $(document).ready(function() {
         if (response) {
           var html = "";
           $.each(response, function (i, it) {
-            html = html.concat(["Name: ", it.title, "<br/>"].join(""));
+            html = html.concat(["Name: ", it.title, "; State: ", it.state, "<br/>"].join(""));
           });
           $("#content").find(".js-content").html(html);
         }
