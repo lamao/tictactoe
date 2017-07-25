@@ -1,4 +1,14 @@
 <div class="section">
     <h3>{{::item.title}}</h3>
     <label>State: {{::item.state.title}}</label>
+    <table class="table table-bordered">
+        <tbody>
+            <tr ng-repeat="row in item.snapshot track by $index">
+                <td class="alert" ng-repeat="column in row track by $index" ng-class="{'alert-info': isLastTurn($index, $parent.$index)}">
+                    <span class="glyphicon glyphicon-remove" ng-if="column == 'x'"></span>
+                    <span class="glyphicon glyphicon-unchecked" ng-if="column == 'o'"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

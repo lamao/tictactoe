@@ -20,16 +20,30 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
 }]);
 
 app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {
-  $q.all([
-    $http.get('/api/game/' + $routeParams.id).then(function(response) {
-      $scope.item = response.data;
-    }),
-    $http.get('/api/state').then(function(response) {
-      $scope.states = response.data;
-    })
-  ]).then(function() {
+  $http.get('/api/game/' + $routeParams.id).then(function(response) {
+    $scope.item = response.data;
     _.extend($scope.item, {
-      state: _.findWhere($scope.states, {code: $scope.item.stateCode})
+      state: {
+        title: 'In progress'
+      },
+      lastTurn: {
+        x: 1,
+        y: 1
+      },
+      snapshot: [
+        [' ', 'o', 'x'],
+        [' ', 'x', ' '],
+        ['o', ' ', 'x']
+      ]
     });
+
+    $scope.isLastTurn = function(x, y) {
+      var lastTurn = $scope.item.lastTurn;
+      if (lastTurn) {
+        return x == lastTurn.x && y == lastTurn.y;
+      } else {
+        return false;
+      }
+    }
   });
 }]);
