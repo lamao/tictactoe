@@ -23,9 +23,6 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', f
   $http.get('/api/game/' + $routeParams.id).then(function(response) {
     $scope.item = response.data;
     _.extend($scope.item, {
-      state: {
-        title: 'In progress'
-      },
       lastTurn: {
         x: 1,
         y: 1

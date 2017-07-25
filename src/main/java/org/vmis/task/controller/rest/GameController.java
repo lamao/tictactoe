@@ -9,10 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.vmis.task.dto.converter.GameDtoConverter;
+import org.vmis.task.dto.converter.GameBriefDtoConverter;
+import org.vmis.task.dto.converter.GameFullDtoConverter;
 import org.vmis.task.dto.model.GameBriefDto;
+import org.vmis.task.dto.model.GameFullDto;
 import org.vmis.task.model.Game;
 import org.vmis.task.service.GameService;
 
@@ -25,20 +26,24 @@ public class GameController {
 
     private GameService gameService;
 
-    private GameDtoConverter converter;
+    private GameBriefDtoConverter briefDtoConverter;
+
+    private GameFullDtoConverter fullDtoConverter;
 
     @Autowired
     public GameController(
-                    GameService gameService,
-                    GameDtoConverter gameDtoConverter) {
+        GameService gameService,
+        GameBriefDtoConverter briefDtoConverter,
+        GameFullDtoConverter fullDtoConverter) {
         this.gameService = gameService;
-        this.converter = gameDtoConverter;
+        this.briefDtoConverter = briefDtoConverter;
+        this.fullDtoConverter = fullDtoConverter;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity findAll() {
         List<Game> games = gameService.findAll();
-        List<GameBriefDto> result = games.stream().map(converter::toDto)
+        List<GameBriefDto> result = games.stream().map(briefDtoConverter::toDto)
                         .collect(Collectors.toList());
         return ResponseEntity.ok(result);
     }
@@ -46,7 +51,7 @@ public class GameController {
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity findById(@PathVariable Long id) {
         Game game = gameService.findById(id);
-        GameBriefDto result = converter.toDto(game);
+        GameFullDto result = fullDtoConverter.toDto(game);
         return ResponseEntity.ok(result);
     }
 }

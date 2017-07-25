@@ -8,7 +8,7 @@ import org.vmis.task.model.Game;
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
  */
 @Component
-public class GameDtoConverter implements Converter<Game, GameBriefDto> {
+public class GameBriefDtoConverter implements Converter<Game, GameBriefDto> {
 
     @Override
     public GameBriefDto toDto(Game game) {

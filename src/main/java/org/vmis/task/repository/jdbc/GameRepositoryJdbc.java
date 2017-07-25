@@ -24,7 +24,7 @@ import java.util.Map;
 public class GameRepositoryJdbc implements GameRepository {
 
     private static final String QUERY_FIND_ALL = "select id, state.code as state_code, title from game join state on state.id = game.state_id";
-    private static final String QUERY_FIND_BY_ID = "select id, state.code as state_code, title from game join state on state.id = game.state_id where id = :id";
+    private static final String QUERY_FIND_BY_ID = "select id, title, state.id as state_id, state.code as state_code, state.title as state_title from game join state on state.id = game.state_id where id = :id";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -54,8 +54,9 @@ public class GameRepositoryJdbc implements GameRepository {
             result.setTitle(rs.getString("title"));
 
             State state = new State();
-            state.setId(rs.getLong("id"));
-            state.setCode(rs.getString("code"));
+            state.setId(rs.getLong("state_id"));
+            state.setCode(rs.getString("state_code"));
+            state.setTitle(rs.getString("state_title"));
             result.setState(state);
 
             return result;
