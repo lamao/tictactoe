@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,11 +36,17 @@ public class GameController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity findAll() {
         List<Game> games = gameService.findAll();
         List<GameBriefDto> result = games.stream().map(converter::toDto)
                         .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity findById(@PathVariable Long id) {
+        Game game = gameService.findById(id);
+        GameBriefDto result = converter.toDto(game);
         return ResponseEntity.ok(result);
     }
 }

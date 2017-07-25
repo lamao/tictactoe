@@ -24,7 +24,7 @@ import java.util.Map;
 public class GameRepositoryJdbc implements GameRepository {
 
     private static final String QUERY_FIND_ALL = "select id, state.code as state_code, title from game join state on state.id = game.state_id";
-//    private static final String QUERY_FIND_BY_ID = "select id, state.code as state_code, title from game where id = :id";
+    private static final String QUERY_FIND_BY_ID = "select id, state.code as state_code, title from game join state on state.id = game.state_id where id = :id";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -40,10 +40,9 @@ public class GameRepositoryJdbc implements GameRepository {
 
     @Override
     public Game findById(Long id) {
-        throw new UnsupportedOperationException("Not implemented");
-//        Map<String, Object> parameters = new HashMap<>();
-//        parameters.put("id", id);
-//        return jdbcTemplate.queryForObject(QUERY_FIND_BY_ID, parameters, new BeanPropertyRowMapper<>(Game.class));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", id);
+        return jdbcTemplate.queryForObject(QUERY_FIND_BY_ID, parameters, new GameRowMapper());
     }
 
     private class GameRowMapper implements RowMapper<Game> {

@@ -12,23 +12,20 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-<h2>Panel</h2>
-<div class="home-section">
-    <ul class="menu-list">
-        <li><a href="/">Main page</a></li>
-        <li><a href="#/games">All games</a></li>
-        <li><a href="#/game/1">Game 1</a></li>
-        <li><a href="#/game/2">Game 2</a></li>
-    </ul>
+<h2>Tic Tac Toe</h2>
+<div class="row">
+    <div class="col-sm-2"><a href="#/">Main page</a></div>
+    <div class="col-sm-2"><a href="#/games">All games</a></div>
+    <div class="col-sm-8"></div>
 </div>
+<hr/>
 <div ng-view></div>
 <script src="/webjars/angularjs/1.6.4/angular.js"></script>
 <script src="/webjars/angularjs/1.6.4/angular-resource.js"></script>
 <script src="/webjars/angularjs/1.6.4/angular-route.js"></script>
 <script src="/webjars/underscorejs/1.8.3/underscore.js"></script>
 <script src="/js/app.js"></script>
-<script src="/js/game-list-controller.js"></script>
-<script src="/js/controller.js"></script>
+<script src="/js/game.js"></script>
 <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.css">
 </body>
 </html>
