@@ -1,4 +1,4 @@
-package org.vmis.task.controller;
+package org.vmis.task.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class MainPageController {
 
-    public static final String VIEW_NAME_INDEX = "index.html";
+    private static final String VIEW_NAME_INDEX = "/index.html";
 
     @GetMapping
     public ModelAndView getMainPage() {

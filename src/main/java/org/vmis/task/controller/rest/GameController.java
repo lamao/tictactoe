@@ -1,4 +1,4 @@
-package org.vmis.task.controller;
+package org.vmis.task.controller.rest;
 
 import java.util.List;
 import java.util.stream.Collectors;
