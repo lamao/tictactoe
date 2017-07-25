@@ -14,7 +14,7 @@ public class GameDtoConverter implements Converter<Game, GameBriefDto> {
     public GameBriefDto toDto(Game game) {
         GameBriefDto dto = new GameBriefDto();
         dto.id = game.getId();
-        dto.state = game.getState().getCode();
+        dto.stateCode = game.getState().getCode();
         dto.title = game.getTitle();
         return dto;
     }

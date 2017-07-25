@@ -6,7 +6,7 @@ package org.vmis.task.dto.model;
 public class GameBriefDto {
     public Long id;
 
-    public String state;
+    public String stateCode;
 
     public String title;
 
