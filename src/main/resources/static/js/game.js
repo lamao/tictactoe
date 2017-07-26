@@ -22,12 +22,6 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
 app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {
   $http.get('/api/game/' + $routeParams.id).then(function(response) {
     $scope.item = response.data;
-    _.extend($scope.item, {
-      lastTurn: {
-        x: 1,
-        y: 1
-      }
-    });
 
     $scope.isLastTurn = function(x, y) {
       var lastTurn = $scope.item.lastTurn;

@@ -10,6 +10,8 @@ public class Game {
 
     private String title;
 
+    private Location lastTurn;
+
     private char[][] snapshot;
 
     public Long getId() {
@@ -34,6 +36,14 @@ public class Game {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Location getLastTurn() {
+        return lastTurn;
+    }
+
+    public void setLastTurn(Location lastTurn) {
+        this.lastTurn = lastTurn;
     }
 
     public char[][] getSnapshot() {

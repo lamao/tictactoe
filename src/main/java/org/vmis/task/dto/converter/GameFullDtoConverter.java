@@ -12,11 +12,12 @@ import org.vmis.task.model.Game;
 public class GameFullDtoConverter implements Converter<Game, GameFullDto> {
 
     private StateDtoConverter stateDtoConverter;
+    private LocationDtoConverter locationDtoConverter;
 
     @Autowired
-    public GameFullDtoConverter(
-                    StateDtoConverter stateDtoConverter) {
+    public GameFullDtoConverter(StateDtoConverter stateDtoConverter, LocationDtoConverter locationDtoConverter) {
         this.stateDtoConverter = stateDtoConverter;
+        this.locationDtoConverter = locationDtoConverter;
     }
 
     @Override
@@ -25,6 +26,9 @@ public class GameFullDtoConverter implements Converter<Game, GameFullDto> {
         dto.id = game.getId();
         dto.state = stateDtoConverter.toDto(game.getState());
         dto.title = game.getTitle();
+        if (game.getLastTurn() != null) {
+            dto.lastTurn = locationDtoConverter.toDto(game.getLastTurn());
+        }
         dto.snapshot = snapshotToDto(game.getSnapshot());
         return dto;
     }

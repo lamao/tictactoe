@@ -6,7 +6,7 @@ package org.vmis.task.dto.model;
 public class GameFullDto extends GameBaseDto {
     public StateDto state;
 
-    public PointDto lastTurn;
+    public LocationDto lastTurn;
 
     public char[][] snapshot;
 }
