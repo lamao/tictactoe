@@ -8,5 +8,5 @@ public class GameFullDto extends GameBaseDto {
 
     public PointDto lastTurn;
 
-    public String[][] snapshot;
+    public char[][] snapshot;
 }

@@ -4,7 +4,7 @@ insert into state (id, code, title) values
 (3, 'O_WON', 'O won'),
 (4, 'DRAW', 'Draw');
 
-insert into game (id, state_id, title) values
-(1, 1, 'First game'),
-(2, 1, 'The second one'),
-(3, 1, 'The third');
+insert into game (id, state_id, title, snapshot) values
+(1, 1, 'First game',     '         '),
+(2, 1, 'The second one', ' o x o x '),
+(3, 1, 'The third',      'o   x    ');

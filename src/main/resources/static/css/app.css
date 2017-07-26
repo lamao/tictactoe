@@ -1,0 +1,8 @@
+table.board {
+    width: auto;
+}
+
+table.board > tbody > tr > td{
+    width: 100px;
+    height: 100px;
+}

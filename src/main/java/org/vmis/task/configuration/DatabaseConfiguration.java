@@ -1,7 +1,9 @@
 package org.vmis.task.configuration;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,4 +31,11 @@ public class DatabaseConfiguration {
     public NamedParameterJdbcTemplate configureJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
+
+//    @PostConstruct
+//    public void getDbManager(){
+//        System.setProperty("java.awt.headless", "false");
+//        DatabaseManagerSwing.main(
+//            new String[] { "--url", "jdbc:hsqldb:mem:testdb", "--user", "sa", "--password", ""});
+//    }
 }

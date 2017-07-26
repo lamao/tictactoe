@@ -26,12 +26,7 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', f
       lastTurn: {
         x: 1,
         y: 1
-      },
-      snapshot: [
-        [' ', 'o', 'x'],
-        [' ', 'x', ' '],
-        ['o', ' ', 'x']
-      ]
+      }
     });
 
     $scope.isLastTurn = function(x, y) {

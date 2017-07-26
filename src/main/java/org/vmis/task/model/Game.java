@@ -10,6 +10,8 @@ public class Game {
 
     private String title;
 
+    private char[][] snapshot;
+
     public Long getId() {
         return id;
     }
@@ -32,5 +34,13 @@ public class Game {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public char[][] getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(char[][] snapshot) {
+        this.snapshot = snapshot;
     }
 }
