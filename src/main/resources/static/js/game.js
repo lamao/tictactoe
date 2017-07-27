@@ -17,6 +17,18 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
     });
   });
 
+  $scope.onShowAddForm = function() {
+    $scope.isShowAddForm = true;
+    $scope.newItem = {};
+  };
+
+  $scope.onSave = function() {
+    $http.post('/api/game', $scope.newItem).then(function(response) {
+      $scope.isShowAddForm = false;
+      $scope.items.push(response.data);
+    });
+  };
+
 }]);
 
 app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {

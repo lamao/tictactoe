@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.vmis.task.dto.converter.GameBriefDtoConverter;
@@ -52,6 +54,13 @@ public class GameController {
     public ResponseEntity findById(@PathVariable Long id) {
         Game game = gameService.findById(id);
         GameFullDto result = fullDtoConverter.toDto(game);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity add(@RequestBody GameBriefDto dto) {
+        Game game  = gameService.add(dto.title);
+        GameBriefDto result = briefDtoConverter.toDto(game);
         return ResponseEntity.ok(result);
     }
 }
