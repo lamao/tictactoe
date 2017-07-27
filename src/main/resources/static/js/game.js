@@ -10,11 +10,7 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
       $scope.states = response.data;
     })
   ]).then(function() {
-    _.each($scope.items, function(it) {
-      _.extend(it, {
-        state: _.findWhere($scope.states, {code: it.stateCode})
-      });
-    });
+    _.each($scope.items, enrichGame);
   });
 
   $scope.onShowAddForm = function() {
@@ -25,9 +21,15 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
   $scope.onSave = function() {
     $http.post('/api/game', $scope.newItem).then(function(response) {
       $scope.isShowAddForm = false;
-      $scope.items.push(response.data);
+      $scope.items.push(enrichGame(response.data));
     });
   };
+
+  function enrichGame(item) {
+    return _.extend(item, {
+      state: _.findWhere($scope.states, {code: item.stateCode})
+    });
+  }
 
 }]);
 

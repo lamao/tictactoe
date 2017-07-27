@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.vmis.task.dto.model.GameFullDto;
 import org.vmis.task.model.Game;
+import org.vmis.task.repository.RepositoryConstants;
 
 /**
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
@@ -33,12 +34,15 @@ public class GameFullDtoConverter implements Converter<Game, GameFullDto> {
         return dto;
     }
 
-    private char[][] snapshotToDto(char[][] modelSnapshot) {
-        char[][] snapshot = new char[modelSnapshot.length][];
-        for (int y = 0; y < modelSnapshot.length; y++) {
-            snapshot[y] = new char[modelSnapshot[y].length];
-            System.arraycopy(modelSnapshot[y], 0, snapshot[y], 0, modelSnapshot[y].length);
+    private char[][] snapshotToDto(String modelSnapshot) {
+        if (modelSnapshot.length() != RepositoryConstants.BOARD_SIZE_WIDTH * RepositoryConstants.BOARD_SIZE_HEIGHT) {
+            throw new IllegalArgumentException("Invalid game snapshot");
         }
-        return snapshot;
+        char[][] result = new char[RepositoryConstants.BOARD_SIZE_HEIGHT][RepositoryConstants.BOARD_SIZE_WIDTH];
+        char[] snapshotAsArray = modelSnapshot.toCharArray();
+        for (int y = 0; y < RepositoryConstants.BOARD_SIZE_HEIGHT; y++) {
+            System.arraycopy(snapshotAsArray, y * RepositoryConstants.BOARD_SIZE_HEIGHT, result[y], 0, RepositoryConstants.BOARD_SIZE_WIDTH);
+        }
+        return result;
     }
 }

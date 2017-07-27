@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.vmis.task.model.Game;
 import org.vmis.task.model.State;
 import org.vmis.task.repository.GameRepository;
+import org.vmis.task.repository.StateRepository;
 import org.vmis.task.service.GameService;
+import org.vmis.task.service.SnapshotService;
 
 import java.util.List;
 
@@ -16,10 +18,14 @@ import java.util.List;
 public class GameServiceImpl implements GameService {
 
     private GameRepository gameRepository;
+    private StateRepository stateRepository;
+    private SnapshotService snapshotService;
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository) {
+    public GameServiceImpl(GameRepository gameRepository, StateRepository stateRepository, SnapshotService snapshotService) {
         this.gameRepository = gameRepository;
+        this.stateRepository = stateRepository;
+        this.snapshotService = snapshotService;
     }
 
     @Override
@@ -34,12 +40,16 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game add(String title) {
-        Game result = new Game();
-        result.setState(new State());
-        result.getState().setCode("IN_PROGRESS");
-        result.setTitle(title);
-        result.setId(1000L);
+        State initialState = stateRepository.getInitialState();
 
-        return result;
+        Game game = new Game();
+        game.setState(initialState);
+        game.setTitle(title);
+        game.setSnapshot(snapshotService.createInitialSnapshot());
+
+        long newId = gameRepository.add(game);
+        game.setId(newId);
+
+        return game;
     }
 }

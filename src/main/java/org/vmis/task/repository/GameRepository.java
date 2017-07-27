@@ -11,4 +11,6 @@ public interface GameRepository {
     List<Game> findAll();
 
     Game findById(Long id);
+
+    long add(Game game);
 }

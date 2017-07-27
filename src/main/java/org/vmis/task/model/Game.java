@@ -12,7 +12,7 @@ public class Game {
 
     private Location lastTurn;
 
-    private char[][] snapshot;
+    private String snapshot;
 
     public Long getId() {
         return id;
@@ -46,11 +46,11 @@ public class Game {
         this.lastTurn = lastTurn;
     }
 
-    public char[][] getSnapshot() {
+    public String getSnapshot() {
         return snapshot;
     }
 
-    public void setSnapshot(char[][] snapshot) {
+    public void setSnapshot(String snapshot) {
         this.snapshot = snapshot;
     }
 }

@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.vmis.task.model.Game;
 import org.vmis.task.repository.GameRepository;
@@ -32,6 +35,7 @@ public class GameRepositoryJdbc implements GameRepository {
 
     private static final String SELECT_ALL = QUERY_BRIEF;
     private static final String SELECT_BY_ID = String.format("%s where gm_id = :id", QUERY_FULL);
+    private static final String INSERT_ADD = "insert into game (gm_title, gm_state_id, gm_snapshot) values (:title, :state_id, :snapshot)";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -58,5 +62,17 @@ public class GameRepositoryJdbc implements GameRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", id);
         return jdbcTemplate.queryForObject(SELECT_BY_ID, parameters, gameFullRowMapper);
+    }
+
+    @Override
+    public long add(Game game) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("title", game.getTitle());
+        parameters.put("state_id", game.getState().getId());
+        parameters.put("snapshot", game.getSnapshot());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(INSERT_ADD, new MapSqlParameterSource(parameters), keyHolder);
+        return keyHolder.getKey().longValue();
     }
 }
