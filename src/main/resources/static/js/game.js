@@ -53,11 +53,15 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
       var cell = item.snapshot[y][x];
 
       if (constants.BOARD.CELL.EMPTY == cell) {
-        // save last turn
-        console.log("Post turn (" + x  + ", " + y + ")");
-        item.lastTurn = {x: x, y: y};
-        item.snapshot[y][x] = $scope.nextTurnSymbol;
-        $scope.nextTurnSymbol = getNextTurnSymbol();
+        var body = {x: x, y: y};
+        $http.post('/api/game/' + item.id + '/make-turn', body)
+          .then(function(response) {
+            console.log("Post turn (" + x + ", " + y + ")");
+            item.lastTurn = body;
+            item.snapshot[y][x] = $scope.nextTurnSymbol;
+            $scope.nextTurnSymbol = getNextTurnSymbol();
+          })
+        ;
       }
     };
   });

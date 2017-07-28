@@ -3,6 +3,7 @@ package org.vmis.task.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vmis.task.model.Game;
+import org.vmis.task.model.Location;
 import org.vmis.task.model.State;
 import org.vmis.task.repository.GameRepository;
 import org.vmis.task.repository.StateRepository;
@@ -51,5 +52,10 @@ public class GameServiceImpl implements GameService {
         game.setId(newId);
 
         return game;
+    }
+
+    @Override
+    public void makeTurn(Long gameId, Location location) {
+
     }
 }

@@ -17,4 +17,12 @@ public class LocationDtoConverter implements Converter<Location, LocationDto> {
         dto.y = location.getY();
         return dto;
     }
+
+    @Override
+    public Location fromDto(LocationDto locationDto) {
+        Location entity = new Location();
+        entity.setX(locationDto.x);
+        entity.setY(locationDto.y);
+        return entity;
+    }
 }
