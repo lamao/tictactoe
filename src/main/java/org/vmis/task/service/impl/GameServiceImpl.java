@@ -8,6 +8,7 @@ import org.vmis.task.model.Snapshot;
 import org.vmis.task.model.State;
 import org.vmis.task.repository.GameRepository;
 import org.vmis.task.repository.LocationRepository;
+import org.vmis.task.repository.RepositoryConstants;
 import org.vmis.task.repository.SnapshotRepository;
 import org.vmis.task.repository.StateRepository;
 import org.vmis.task.service.GameService;
@@ -70,8 +71,40 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void makeTurn(Long gameId, Location location) {
-        // Long id = locationRepository.add(location);
-        // update snapshot with value
+    public State makeTurn(Long gameId, Location location) {
+        Game game = gameRepository.findById(gameId);
+        Snapshot snapshot = game.getSnapshot();
+        char[][] dump = snapshot.getDump();
+        if (dump[location.getY()][location.getX()] != RepositoryConstants.BOARD_EMPTY_CELL) {
+            throw new IllegalArgumentException("Not empty cell");
+        }
+
+        dump[location.getY()][location.getX()] = getNextTurn(dump, snapshot.getLastTurn());
+
+        Long locationId = locationRepository.add(location);
+        location.setId(locationId);
+        snapshot.setLastTurn(location);
+
+        snapshotRepository.update(snapshot);
+
+        State newState = calculateState(dump);
+        if (!newState.getCode().equals(game.getState().getCode())) {
+            game.setState(newState);
+            gameRepository.update(game);
+        }
+        return newState;
+    }
+
+    private char getNextTurn(char[][] dump, Location lastTurn) {
+        char result = RepositoryConstants.BOARD_X_CELL;
+        if (lastTurn != null && dump[lastTurn.getY()][lastTurn.getX()] == RepositoryConstants.BOARD_X_CELL) {
+            result = RepositoryConstants.BOARD_O_CELL;
+        }
+        return result;
+    }
+
+    private State calculateState(char[][] dump) {
+        State state = stateRepository.findByCode("IN_PROGRESS");
+        return state;
     }
 }

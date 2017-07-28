@@ -9,18 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.vmis.task.dto.converter.GameBriefDtoConverter;
 import org.vmis.task.dto.converter.GameFullDtoConverter;
 import org.vmis.task.dto.converter.LocationDtoConverter;
+import org.vmis.task.dto.converter.StateDtoConverter;
 import org.vmis.task.dto.model.GameBriefDto;
 import org.vmis.task.dto.model.GameFullDto;
 import org.vmis.task.dto.model.LocationDto;
+import org.vmis.task.dto.model.StateDto;
 import org.vmis.task.model.Game;
 import org.vmis.task.model.Location;
+import org.vmis.task.model.State;
 import org.vmis.task.service.GameService;
 
 /**
@@ -35,6 +37,7 @@ public class GameController {
     private GameBriefDtoConverter briefDtoConverter;
     private GameFullDtoConverter fullDtoConverter;
     private LocationDtoConverter locationDtoConverter;
+    private StateDtoConverter stateDtoConverter;
 
 
 
@@ -43,11 +46,13 @@ public class GameController {
         GameService gameService,
         GameBriefDtoConverter briefDtoConverter,
         GameFullDtoConverter fullDtoConverter,
-        LocationDtoConverter locationDtoConverter) {
+        LocationDtoConverter locationDtoConverter,
+        StateDtoConverter stateDtoConverter) {
         this.gameService = gameService;
         this.briefDtoConverter = briefDtoConverter;
         this.fullDtoConverter = fullDtoConverter;
         this.locationDtoConverter = locationDtoConverter;
+        this.stateDtoConverter = stateDtoConverter;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,7 +80,8 @@ public class GameController {
     @PostMapping(value = "{id}/make-turn", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity makeTurn(@PathVariable Long id, @RequestBody LocationDto locationDto) {
         Location location = locationDtoConverter.fromDto(locationDto);
-        gameService.makeTurn(id, location);
-        return ResponseEntity.ok().build();
+        State state = gameService.makeTurn(id, location);
+        StateDto result = stateDtoConverter.toDto(state);
+        return ResponseEntity.ok(result);
     };
 }

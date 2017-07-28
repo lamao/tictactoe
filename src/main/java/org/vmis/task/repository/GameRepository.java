@@ -13,4 +13,6 @@ public interface GameRepository {
     Game findById(Long id);
 
     long add(Game game);
+
+    void update(Game game);
 }

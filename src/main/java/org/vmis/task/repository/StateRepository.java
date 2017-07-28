@@ -12,4 +12,6 @@ public interface StateRepository {
     List<State> findAll();
 
     State getInitialState();
+
+    State findByCode(String code);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.vmis.task.model.State;
@@ -22,6 +23,7 @@ public class StateRepositoryJdbc implements StateRepository {
 
     private static final String SELECT_ALL = QUERY_BASE;
     private static final String SELECT_INITIAL_STATE = String.format("%s where st_code='IN_PROGRESS'", QUERY_BASE);
+    private static final String SELECT_BY_CODE = String.format("%s where st_code=:code", QUERY_BASE);
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -39,5 +41,10 @@ public class StateRepositoryJdbc implements StateRepository {
     @Override
     public State getInitialState() {
         return jdbcTemplate.queryForObject(SELECT_INITIAL_STATE, Collections.emptyMap(), new StateRowMapper());
+    }
+
+    @Override
+    public State findByCode(String code) {
+        return jdbcTemplate.queryForObject(SELECT_BY_CODE, new MapSqlParameterSource("code", code), new StateRowMapper());
     }
 }

@@ -8,4 +8,6 @@ import org.vmis.task.model.Snapshot;
 public interface SnapshotRepository {
 
     Long add(Snapshot snapshot);
+
+    void update(Snapshot snapshot);
 }

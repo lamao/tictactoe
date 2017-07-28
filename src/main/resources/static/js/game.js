@@ -60,12 +60,14 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
             item.lastTurn = body;
             item.snapshot[y][x] = $scope.nextTurnSymbol;
             $scope.nextTurnSymbol = getNextTurnSymbol();
+            $scope.item.state = response.data;
           })
         ;
       }
     };
   });
 
+  // TODO: return from BE
   function getNextTurnSymbol () {
     var result = constants.BOARD.CELL.X;
     if (getLastTurnSymbol() == constants.BOARD.CELL.X) {

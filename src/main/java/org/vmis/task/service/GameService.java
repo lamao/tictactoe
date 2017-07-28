@@ -2,6 +2,7 @@ package org.vmis.task.service;
 
 import org.vmis.task.model.Game;
 import org.vmis.task.model.Location;
+import org.vmis.task.model.State;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface GameService {
 
     Game add(String title);
 
-    void makeTurn(Long gameId, Location location);
+    State makeTurn(Long gameId, Location location);
 }
