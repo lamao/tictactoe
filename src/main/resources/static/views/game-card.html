@@ -1,14 +1,16 @@
 <div class="section">
     <div>
         <h3>{{::item.title}}</h3>
-        <label>State: {{::item.state.title}}</label>
+        <label>State: {{item.state.title}}</label>
     </div>
     <div>
         <label>Next turn: {{nextTurnSymbol}}</label>
         <table class="table table-bordered board">
             <tbody>
                 <tr ng-repeat="row in item.snapshot track by $index">
-                    <td class="alert" ng-repeat="column in row track by $index" ng-class="{'alert-info': isLastTurn($index, $parent.$index)}">
+                    <td class="alert" ng-repeat="column in row track by $index"
+                        ng-class="{'alert-info': isLastTurn($index, $parent.$index)}"
+                        ng-click="onClick($index, $parent.$index)">
                         <span class="glyphicon glyphicon-remove" ng-if="column == 'x'"></span>
                         <span class="glyphicon glyphicon-unchecked" ng-if="column == 'o'"></span>
                         <span ng-if="column == ' '"> </span>

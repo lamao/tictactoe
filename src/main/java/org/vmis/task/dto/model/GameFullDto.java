@@ -8,5 +8,6 @@ public class GameFullDto extends GameBaseDto {
 
     public LocationDto lastTurn;
 
-    public char[][] snapshot;
+    // TODO: Configure converty char[][] to 2-dimensional array in json. Now it is converted to String[]
+    public String[][] snapshot;
 }

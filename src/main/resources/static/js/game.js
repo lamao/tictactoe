@@ -36,9 +36,8 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
 app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', 'constants', function($scope, $http, $q, $routeParams, constants) {
 
   $http.get('/api/game/' + $routeParams.id).then(function (response) {
-    var item = response.data;
-    $scope.item = item;
-    $scope.nextTurnSymbol = getNextTurnSymbol(item);
+    $scope.item = response.data;
+    $scope.nextTurnSymbol = getNextTurnSymbol();
 
     $scope.isLastTurn = function(x, y) {
       var lastTurn = $scope.item.lastTurn;
@@ -47,18 +46,32 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
       } else {
         return false;
       }
-    }
+    };
+
+    $scope.onClick = function(x, y) {
+      var item = $scope.item;
+      var cell = item.snapshot[y][x];
+
+      if (constants.BOARD.CELL.EMPTY == cell) {
+        // save last turn
+        console.log("Post turn (" + x  + ", " + y + ")");
+        item.lastTurn = {x: x, y: y};
+        item.snapshot[y][x] = $scope.nextTurnSymbol;
+        $scope.nextTurnSymbol = getNextTurnSymbol();
+      }
+    };
   });
 
-  function getNextTurnSymbol (item) {
+  function getNextTurnSymbol () {
     var result = constants.BOARD.CELL.X;
-    if (getLastTurnSymbol(item) == constants.BOARD.CELL.X) {
+    if (getLastTurnSymbol() == constants.BOARD.CELL.X) {
       result = constants.BOARD.CELL.O;
     }
     return result;
   }
 
-  function getLastTurnSymbol(item) {
+  function getLastTurnSymbol() {
+    var item = $scope.item;
     var result = null;
     if (item.lastTurn) {
       result = item.snapshot[item.lastTurn.y][item.lastTurn.x]

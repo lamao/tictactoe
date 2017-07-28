@@ -34,14 +34,17 @@ public class GameFullDtoConverter implements Converter<Game, GameFullDto> {
         return dto;
     }
 
-    private char[][] snapshotToDto(String modelSnapshot) {
+    private String[][] snapshotToDto(String modelSnapshot) {
         if (modelSnapshot.length() != RepositoryConstants.BOARD_SIZE_WIDTH * RepositoryConstants.BOARD_SIZE_HEIGHT) {
             throw new IllegalArgumentException("Invalid game snapshot");
         }
-        char[][] result = new char[RepositoryConstants.BOARD_SIZE_HEIGHT][RepositoryConstants.BOARD_SIZE_WIDTH];
+        String[][] result = new String[RepositoryConstants.BOARD_SIZE_HEIGHT][RepositoryConstants.BOARD_SIZE_WIDTH];
         char[] snapshotAsArray = modelSnapshot.toCharArray();
         for (int y = 0; y < RepositoryConstants.BOARD_SIZE_HEIGHT; y++) {
-            System.arraycopy(snapshotAsArray, y * RepositoryConstants.BOARD_SIZE_HEIGHT, result[y], 0, RepositoryConstants.BOARD_SIZE_WIDTH);
+            result[y] = new String[RepositoryConstants.BOARD_SIZE_WIDTH];
+            for (int x = 0; x < RepositoryConstants.BOARD_SIZE_WIDTH; x++) {
+                result[y][x] = String.valueOf(snapshotAsArray[y * RepositoryConstants.BOARD_SIZE_WIDTH + x]);
+            }
         }
         return result;
     }
