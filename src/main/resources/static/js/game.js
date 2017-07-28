@@ -33,9 +33,12 @@ app.controller('gameListController', ['$scope', '$http', '$q', function($scope, 
 
 }]);
 
-app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', function($scope, $http, $q, $routeParams) {
-  $http.get('/api/game/' + $routeParams.id).then(function(response) {
-    $scope.item = response.data;
+app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', 'constants', function($scope, $http, $q, $routeParams, constants) {
+
+  $http.get('/api/game/' + $routeParams.id).then(function (response) {
+    var item = response.data;
+    $scope.item = item;
+    $scope.nextTurnSymbol = getNextTurnSymbol(item);
 
     $scope.isLastTurn = function(x, y) {
       var lastTurn = $scope.item.lastTurn;
@@ -46,4 +49,20 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', f
       }
     }
   });
+
+  function getNextTurnSymbol (item) {
+    var result = constants.BOARD.CELL.X;
+    if (getLastTurnSymbol(item) == constants.BOARD.CELL.X) {
+      result = constants.BOARD.CELL.O;
+    }
+    return result;
+  }
+
+  function getLastTurnSymbol(item) {
+    var result = null;
+    if (item.lastTurn) {
+      result = item.snapshot[item.lastTurn.y][item.lastTurn.x]
+    }
+    return result;
+  }
 }]);
