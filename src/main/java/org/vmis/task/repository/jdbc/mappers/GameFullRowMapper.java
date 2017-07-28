@@ -13,23 +13,20 @@ import java.sql.SQLException;
 @Component
 public class GameFullRowMapper extends GameBaseRowMapper {
 
-    private LocationRowMapper locationRowMapper;
+    private SnapshotRowMapper snapshotRowMapper;
 
     @Autowired
-    public GameFullRowMapper(StateRowMapper stateRowMapper, LocationRowMapper locationRowMapper) {
+    public GameFullRowMapper(StateRowMapper stateRowMapper,
+                             SnapshotRowMapper snapshotRowMapper) {
         super(stateRowMapper);
-        this.locationRowMapper = locationRowMapper;
+        this.snapshotRowMapper = snapshotRowMapper;
     }
 
     @Override
     public Game mapRow(ResultSet rs, int rowNum) throws SQLException {
         Game result = super.mapRow(rs, rowNum);
 
-        rs.getLong("lc_id");
-        if (!rs.wasNull()) {
-            result.setLastTurn(locationRowMapper.mapRow(rs, rowNum));
-        }
-        result.setSnapshot(rs.getString("gm_snapshot"));
+        result.setSnapshot(snapshotRowMapper.mapRow(rs, rowNum));
 
         return result;
     }

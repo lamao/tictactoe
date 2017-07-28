@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vmis.task.model.Game;
 import org.vmis.task.model.Location;
+import org.vmis.task.model.Snapshot;
 import org.vmis.task.model.State;
 import org.vmis.task.repository.GameRepository;
+import org.vmis.task.repository.LocationRepository;
+import org.vmis.task.repository.SnapshotRepository;
 import org.vmis.task.repository.StateRepository;
 import org.vmis.task.service.GameService;
 import org.vmis.task.service.SnapshotService;
@@ -21,12 +24,20 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     private StateRepository stateRepository;
     private SnapshotService snapshotService;
+    private LocationRepository locationRepository;
+    private SnapshotRepository snapshotRepository;
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository, StateRepository stateRepository, SnapshotService snapshotService) {
+    public GameServiceImpl(GameRepository gameRepository,
+                           StateRepository stateRepository,
+                           SnapshotService snapshotService,
+                           LocationRepository locationRepository,
+                           SnapshotRepository snapshotRepository) {
         this.gameRepository = gameRepository;
         this.stateRepository = stateRepository;
         this.snapshotService = snapshotService;
+        this.locationRepository = locationRepository;
+        this.snapshotRepository = snapshotRepository;
     }
 
     @Override
@@ -46,7 +57,11 @@ public class GameServiceImpl implements GameService {
         Game game = new Game();
         game.setState(initialState);
         game.setTitle(title);
-        game.setSnapshot(snapshotService.createInitialSnapshot());
+
+        Snapshot snapshot = snapshotService.createInitialSnapshot();
+        Long snapshotId = snapshotRepository.add(snapshot);
+        snapshot.setId(snapshotId);
+        game.setSnapshot(snapshot);
 
         long newId = gameRepository.add(game);
         game.setId(newId);
@@ -56,6 +71,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void makeTurn(Long gameId, Location location) {
-
+        // Long id = locationRepository.add(location);
+        // update snapshot with value
     }
 }

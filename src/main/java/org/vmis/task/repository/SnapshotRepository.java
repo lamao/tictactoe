@@ -1,10 +1,11 @@
-package org.vmis.task.service;
+package org.vmis.task.repository;
 
 import org.vmis.task.model.Snapshot;
 
 /**
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
  */
-public interface SnapshotService {
-    Snapshot createInitialSnapshot();
+public interface SnapshotRepository {
+
+    Long add(Snapshot snapshot);
 }

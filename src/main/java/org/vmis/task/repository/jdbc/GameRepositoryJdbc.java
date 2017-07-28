@@ -23,19 +23,21 @@ public class GameRepositoryJdbc implements GameRepository {
 
     public static final String COLUMNS_BASE = "gm_id, gm_title";
     public static final String COLUMNS_BRIEF = COLUMNS_BASE;
-    public static final String COLUMNS_FULL = String.format("%s, gm_snapshot", COLUMNS_BASE);
+    public static final String COLUMNS_FULL = String.format("%s, gm_snapshot_id", COLUMNS_BASE);
 
     public static final String QUERY_BRIEF = String.format(
                     "select %s, %s from game join state on st_id = gm_state_id", COLUMNS_BRIEF,
                     StateRepositoryJdbc.COLUMNS);
     public static final String QUERY_FULL = String
-                    .format("select %s, %s, %s from game join state on st_id = gm_state_id left join location on lc_id = gm_last_turn_id",
-                                    COLUMNS_FULL, StateRepositoryJdbc.COLUMNS,
+                    .format("select %s, %s, %s, %s from game join state on st_id = gm_state_id join snapshot on sn_id = gm_snapshot_id left join location on lc_id = sn_last_turn_id",
+                                    COLUMNS_FULL,
+                                    StateRepositoryJdbc.COLUMNS,
+                                    SnapshotRepositoryJdbc.COLUMNS,
                                     LocationRepositoryJdbc.COLUMNS);
 
     private static final String SELECT_ALL = QUERY_BRIEF;
     private static final String SELECT_BY_ID = String.format("%s where gm_id = :id", QUERY_FULL);
-    private static final String INSERT_ADD = "insert into game (gm_title, gm_state_id, gm_snapshot) values (:title, :state_id, :snapshot)";
+    private static final String INSERT_ADD = "insert into game (gm_title, gm_state_id, gm_snapshot_id) values (:title, :state_id, :snapshot_id)";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -69,7 +71,7 @@ public class GameRepositoryJdbc implements GameRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", game.getTitle());
         parameters.put("state_id", game.getState().getId());
-        parameters.put("snapshot", game.getSnapshot());
+        parameters.put("snapshot_id", game.getSnapshot().getId());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(INSERT_ADD, new MapSqlParameterSource(parameters), keyHolder);

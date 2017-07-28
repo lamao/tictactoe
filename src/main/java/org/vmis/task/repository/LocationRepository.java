@@ -6,4 +6,5 @@ import org.vmis.task.model.Location;
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
  */
 public interface LocationRepository {
+    Long add(Location location);
 }

@@ -10,9 +10,7 @@ public class Game {
 
     private String title;
 
-    private Location lastTurn;
-
-    private String snapshot;
+    private Snapshot snapshot;
 
     public Long getId() {
         return id;
@@ -38,19 +36,11 @@ public class Game {
         this.title = title;
     }
 
-    public Location getLastTurn() {
-        return lastTurn;
-    }
-
-    public void setLastTurn(Location lastTurn) {
-        this.lastTurn = lastTurn;
-    }
-
-    public String getSnapshot() {
+    public Snapshot getSnapshot() {
         return snapshot;
     }
 
-    public void setSnapshot(String snapshot) {
+    public void setSnapshot(Snapshot snapshot) {
         this.snapshot = snapshot;
     }
 }

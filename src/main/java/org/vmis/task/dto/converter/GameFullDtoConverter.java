@@ -27,14 +27,14 @@ public class GameFullDtoConverter implements Converter<Game, GameFullDto> {
         dto.id = game.getId();
         dto.state = stateDtoConverter.toDto(game.getState());
         dto.title = game.getTitle();
-        if (game.getLastTurn() != null) {
-            dto.lastTurn = locationDtoConverter.toDto(game.getLastTurn());
+        if (game.getSnapshot().getLastTurn() != null) {
+            dto.lastTurn = locationDtoConverter.toDto(game.getSnapshot().getLastTurn());
         }
-        dto.snapshot = snapshotToDto(game.getSnapshot());
+        dto.snapshot = parseDump(game.getSnapshot().getDump());
         return dto;
     }
 
-    private String[][] snapshotToDto(String modelSnapshot) {
+    private String[][] parseDump(String modelSnapshot) {
         if (modelSnapshot.length() != RepositoryConstants.BOARD_SIZE_WIDTH * RepositoryConstants.BOARD_SIZE_HEIGHT) {
             throw new IllegalArgumentException("Invalid game snapshot");
         }
