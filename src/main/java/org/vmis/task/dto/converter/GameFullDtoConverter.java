@@ -6,6 +6,8 @@ import org.vmis.task.dto.model.GameFullDto;
 import org.vmis.task.model.Game;
 import org.vmis.task.repository.RepositoryConstants;
 
+import java.util.Arrays;
+
 /**
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
  */
@@ -30,20 +32,16 @@ public class GameFullDtoConverter implements Converter<Game, GameFullDto> {
         if (game.getSnapshot().getLastTurn() != null) {
             dto.lastTurn = locationDtoConverter.toDto(game.getSnapshot().getLastTurn());
         }
-        dto.snapshot = parseDump(game.getSnapshot().getDump());
+        dto.snapshot = convertDump(game.getSnapshot().getDump());
         return dto;
     }
 
-    private String[][] parseDump(String modelSnapshot) {
-        if (modelSnapshot.length() != RepositoryConstants.BOARD_SIZE_WIDTH * RepositoryConstants.BOARD_SIZE_HEIGHT) {
-            throw new IllegalArgumentException("Invalid game snapshot");
-        }
-        String[][] result = new String[RepositoryConstants.BOARD_SIZE_HEIGHT][RepositoryConstants.BOARD_SIZE_WIDTH];
-        char[] snapshotAsArray = modelSnapshot.toCharArray();
-        for (int y = 0; y < RepositoryConstants.BOARD_SIZE_HEIGHT; y++) {
-            result[y] = new String[RepositoryConstants.BOARD_SIZE_WIDTH];
-            for (int x = 0; x < RepositoryConstants.BOARD_SIZE_WIDTH; x++) {
-                result[y][x] = String.valueOf(snapshotAsArray[y * RepositoryConstants.BOARD_SIZE_WIDTH + x]);
+    private String[][] convertDump(char[][] dump) {
+        String[][] result = new String[dump.length][];
+        for (int i = 0; i < dump.length; i++) {
+            result[i] = new String[dump[i].length];
+            for (int k = 0; k < dump[i].length; k++) {
+                result[i][k] = String.valueOf(dump[i][k]);
             }
         }
         return result;

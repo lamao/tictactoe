@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 import org.vmis.task.model.Snapshot;
 import org.vmis.task.repository.SnapshotRepository;
+import org.vmis.task.repository.jdbc.converters.DumpConverter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +24,19 @@ public class SnapshotRepositoryJdbc implements SnapshotRepository {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    private DumpConverter dumpConverter;
+
     @Autowired
-    public SnapshotRepositoryJdbc(NamedParameterJdbcTemplate jdbcTemplate) {
+    public SnapshotRepositoryJdbc(NamedParameterJdbcTemplate jdbcTemplate,
+                                  DumpConverter dumpConverter) {
         this.jdbcTemplate = jdbcTemplate;
+        this.dumpConverter = dumpConverter;
     }
 
     @Override
     public Long add(Snapshot snapshot) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("dump", snapshot.getDump());
+        parameters.put("dump", dumpConverter.toStorage(snapshot.getDump()));
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(INSERT_ADD, new MapSqlParameterSource(parameters), keyHolder);

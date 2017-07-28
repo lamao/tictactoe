@@ -8,7 +8,7 @@ public class Snapshot {
     
     private Location lastTurn;
     
-    private String dump;
+    private char[][] dump;
 
     public Long getId() {
         return id;
@@ -26,11 +26,11 @@ public class Snapshot {
         this.lastTurn = lastTurn;
     }
 
-    public String getDump() {
+    public char[][] getDump() {
         return dump;
     }
 
-    public void setDump(String dump) {
+    public void setDump(char[][] dump) {
         this.dump = dump;
     }
 }

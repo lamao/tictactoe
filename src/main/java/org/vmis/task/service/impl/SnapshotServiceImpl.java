@@ -19,9 +19,11 @@ public class SnapshotServiceImpl implements SnapshotService {
         return result;
     }
 
-    private String buildInitialDump() {
-        char[] dump = new char[RepositoryConstants.BOARD_SIZE_HEIGHT * RepositoryConstants.BOARD_SIZE_WIDTH];
-        Arrays.fill(dump, RepositoryConstants.BOARD_EMPTY_CELL);
-        return String.valueOf(dump);
+    private char[][] buildInitialDump() {
+        char[][] dump = new char[RepositoryConstants.BOARD_SIZE_HEIGHT][RepositoryConstants.BOARD_SIZE_WIDTH];
+        for (char[] row : dump) {
+            Arrays.fill(row, RepositoryConstants.BOARD_EMPTY_CELL);
+        }
+        return dump;
     }
 }
