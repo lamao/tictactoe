@@ -175,7 +175,7 @@ public class GameServiceImpl implements GameService {
         int result = 0;
         for (char[] row : dump) {
             for (char cell : row) {
-                if (cell != RepositoryConstants.BOARD_EMPTY_CELL) {
+                if (cell == RepositoryConstants.BOARD_EMPTY_CELL) {
                     result++;
                 }
             }
