@@ -75,10 +75,6 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId);
         Snapshot snapshot = game.getSnapshot();
         char[][] dump = snapshot.getDump();
-        if (dump[location.getY()][location.getX()] != RepositoryConstants.BOARD_EMPTY_CELL) {
-            throw new IllegalArgumentException("Not empty cell");
-        }
-
         dump[location.getY()][location.getX()] = getNextTurn(dump, snapshot.getLastTurn());
 
         Long locationId = locationRepository.add(location);
@@ -87,7 +83,7 @@ public class GameServiceImpl implements GameService {
 
         snapshotRepository.update(snapshot);
 
-        State newState = calculateState(dump);
+        State newState = calculateState(dump, location);
         if (!newState.getCode().equals(game.getState().getCode())) {
             game.setState(newState);
             gameRepository.update(game);
@@ -103,8 +99,98 @@ public class GameServiceImpl implements GameService {
         return result;
     }
 
-    private State calculateState(char[][] dump) {
-        State state = stateRepository.findByCode("IN_PROGRESS");
-        return state;
+    private State calculateState(char[][] dump, Location lastTurn) {
+
+        char lastPlacedSymbol = dump[lastTurn.getY()][lastTurn.getX()];
+
+        int emptyCellsCount = getEmptyCellsCount(dump);
+        if (emptyCellsCount == 0) {
+            return stateRepository.findByCode(RepositoryConstants.STATE_CODE_DRAW);
+        }
+
+        int horizontalFilledCount = getHorizontalFilledCellsCount(dump, lastTurn, lastPlacedSymbol);
+        if (horizontalFilledCount == RepositoryConstants.BOARD_WIN_LINE_LENGTH) {
+            return stateRepository.findByCode(getStateCodeByLastPlacedSymbol(lastPlacedSymbol));
+        }
+
+        int verticalFilledCount = getVerticalFilledCellsCount(dump, lastTurn, lastPlacedSymbol);
+        if (verticalFilledCount == RepositoryConstants.BOARD_WIN_LINE_LENGTH) {
+            return stateRepository.findByCode(getStateCodeByLastPlacedSymbol(lastPlacedSymbol));
+        }
+
+        int mainDiagonalFilledCount = getMainDiagonalFilledCellsCount(dump, lastPlacedSymbol);
+        if (mainDiagonalFilledCount == RepositoryConstants.BOARD_WIN_LINE_LENGTH) {
+            return stateRepository.findByCode(getStateCodeByLastPlacedSymbol(lastPlacedSymbol));
+        }
+
+        int secondDiagonalFilledCount = getSecondDiagonalFilledCellsCount(dump, lastPlacedSymbol);
+        if (secondDiagonalFilledCount == RepositoryConstants.BOARD_WIN_LINE_LENGTH) {
+            return stateRepository.findByCode(getStateCodeByLastPlacedSymbol(lastPlacedSymbol));
+        }
+
+        return stateRepository.findByCode(RepositoryConstants.STATE_CODE_IN_PROGRESS);
+    }
+
+    private int getSecondDiagonalFilledCellsCount(char[][] dump, char lastPlacedSymbol) {
+        int result = 0;
+        for (int i = dump.length - 1; i >= 0; i--) {
+            if (dump[i][dump.length - 1 - i] == lastPlacedSymbol) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private int getMainDiagonalFilledCellsCount(char[][] dump, char lastPlacedSymbol) {
+        int result = 0;
+        for (int i = 0; i < dump.length; i++) {
+            if (dump[i][i] == lastPlacedSymbol) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private int getVerticalFilledCellsCount(char[][] dump, Location lastTurn, char lastPlacedSymbol) {
+        int result = 0;
+        for (int y = 0; y < dump[lastTurn.getX()].length; y++) {
+            if (dump[y][lastTurn.getX()] == lastPlacedSymbol) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private int getHorizontalFilledCellsCount(char[][] dump, Location lastTurn, char lastPlacedSymbol) {
+        int result = 0;
+        for (int x = 0; x < dump[lastTurn.getY()].length; x++) {
+            if (dump[lastTurn.getY()][x] == lastPlacedSymbol) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private int getEmptyCellsCount(char[][] dump) {
+        int result = 0;
+        for (char[] row : dump) {
+            for (char cell : row) {
+                if (cell != RepositoryConstants.BOARD_EMPTY_CELL) {
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
+    private String getStateCodeByLastPlacedSymbol(char lastPlacedSymbol) {
+        String result = null;
+        if (lastPlacedSymbol == RepositoryConstants.BOARD_X_CELL) {
+            result = RepositoryConstants.STATE_CODE_X_WON;
+        } else if (lastPlacedSymbol == RepositoryConstants.BOARD_O_CELL) {
+            result = RepositoryConstants.STATE_CODE_O_WON;
+        }
+
+        return result;
     }
 }

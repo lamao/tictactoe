@@ -1,7 +1,9 @@
 /**
  * Created by invenit on 25.07.17.
  */
-app.controller('gameListController', ['$scope', '$http', '$q', function($scope, $http, $q) {
+app.controller('gameListController', ['$scope', '$http', '$q', 'constants', function($scope, $http, $q, constants) {
+  $scope.constants = constants;
+
   $q.all([
       $http.get('/api/game').then(function(response) {
       $scope.items = response.data;
@@ -48,23 +50,25 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
       }
     };
 
-    $scope.onClick = function(x, y) {
-      var item = $scope.item;
-      var cell = item.snapshot[y][x];
+    if ($scope.item.state.code == constants.STATES.IN_PROGRESS) {
+      $scope.onClick = function (x, y) {
+        var item = $scope.item;
+        var cell = item.snapshot[y][x];
 
-      if (constants.BOARD.CELL.EMPTY == cell) {
-        var body = {x: x, y: y};
-        $http.post('/api/game/' + item.id + '/make-turn', body)
-          .then(function(response) {
-            console.log("Post turn (" + x + ", " + y + ")");
-            item.lastTurn = body;
-            item.snapshot[y][x] = $scope.nextTurnSymbol;
-            $scope.nextTurnSymbol = getNextTurnSymbol();
-            $scope.item.state = response.data;
-          })
-        ;
-      }
-    };
+        if (constants.BOARD.CELL.EMPTY == cell) {
+          var body = {x: x, y: y};
+          $http.post('/api/game/' + item.id + '/make-turn', body)
+            .then(function (response) {
+              console.log("Post turn (" + x + ", " + y + ")");
+              item.lastTurn = body;
+              item.snapshot[y][x] = $scope.nextTurnSymbol;
+              $scope.nextTurnSymbol = getNextTurnSymbol();
+              $scope.item.state = response.data;
+            })
+          ;
+        }
+      };
+    }
   });
 
   // TODO: return from BE

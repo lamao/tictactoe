@@ -18,7 +18,12 @@
         <div class="col-sm-4">{{::item.state.title}}</div>
         <div class="col-sm-2">
             <a href="#/game/{{::item.id}}" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-play"></span> Play
+                <div ng-if="item.state.code == constants.STATES.IN_PROGRESS">
+                    <span class="glyphicon glyphicon-play"></span> Play
+                </div>
+                <div ng-if="item.state.code != constants.STATES.IN_PROGRESS">
+                    <span class="glyphicon glyphicon-stop"></span>
+                </div>
             </a>
         </div>
     </div>
