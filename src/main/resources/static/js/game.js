@@ -35,7 +35,7 @@ app.controller('gameListController', ['$scope', '$http', '$q', 'constants', func
 
 }]);
 
-app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', 'constants', function($scope, $http, $q, $routeParams, constants) {
+app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '$uibModal', 'constants', function($scope, $http, $q, $routeParams, $uibModal, constants) {
 
   $http.get('/api/game/' + $routeParams.id).then(function (response) {
     $scope.item = response.data;
@@ -66,7 +66,7 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
               var newState = response.data;
               $scope.item.state = newState;
               if (newState.code != constants.STATES.IN_PROGRESS) {
-                alert('Game finished. ' + newState.title);
+                showModal(newState.title);
               }
             })
           ;
@@ -92,4 +92,31 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
     }
     return result;
   }
+
+  function showModal(message) {
+    var modal = $uibModal.open({
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'modal.tmpl',
+      controller: 'gameCardModalInstanceCtrl',
+      resolve: {
+        content: function() {
+          return {
+            message: message
+          }
+        }
+      }
+    });
+
+    modal.result.then(function (selectedItem) {
+      console.info('Modal OK at: ' + new Date());
+    }, function () {
+      console.info('Modal Close at: ' + new Date());
+    });
+  }
 }]);
+
+app.controller('gameCardModalInstanceCtrl', function ($scope, $uibModalInstance) {
+  $scope.content = $scope.$resolve.content;
+  $scope.ok = $uibModalInstance.close;
+});
