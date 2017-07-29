@@ -50,25 +50,29 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
       }
     };
 
-    if ($scope.item.state.code == constants.STATES.IN_PROGRESS) {
-      $scope.onClick = function (x, y) {
-        var item = $scope.item;
+    $scope.onClick = function (x, y) {
+      var item = $scope.item;
+      if (item.state.code == constants.STATES.IN_PROGRESS) {
         var cell = item.snapshot[y][x];
 
         if (constants.BOARD.CELL.EMPTY == cell) {
           var body = {x: x, y: y};
           $http.post('/api/game/' + item.id + '/make-turn', body)
             .then(function (response) {
-              console.log("Post turn (" + x + ", " + y + ")");
               item.lastTurn = body;
               item.snapshot[y][x] = $scope.nextTurnSymbol;
               $scope.nextTurnSymbol = getNextTurnSymbol();
-              $scope.item.state = response.data;
+
+              var newState = response.data;
+              $scope.item.state = newState;
+              if (newState.code != constants.STATES.IN_PROGRESS) {
+                alert('Game finished. ' + newState.title);
+              }
             })
           ;
         }
-      };
-    }
+      }
+    };
   });
 
   // TODO: return from BE
