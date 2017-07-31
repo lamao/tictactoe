@@ -13,6 +13,6 @@ app.config(function($locationProvider, $routeProvider) {
       controller: 'gameCardController'
     })
     .otherwise(
-      { redirectTo: '/'}
+      { redirectTo: '/games'}
     );
 });
