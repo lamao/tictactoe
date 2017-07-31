@@ -81,6 +81,7 @@ public class GameServiceImpl implements GameService {
         location.setId(locationId);
         snapshot.setLastTurn(location);
 
+        gameRepository.addTurn(game.getId(), locationId);
         snapshotRepository.update(snapshot);
 
         State newState = calculateState(dump, location);

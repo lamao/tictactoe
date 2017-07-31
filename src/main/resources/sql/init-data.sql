@@ -22,3 +22,10 @@ insert into game (gm_id, gm_state_id, gm_title, gm_snapshot_id) values
 (2, 1, 'The second one',  2),
 (3, 1, 'The third',       3),
 (4, 2, 'Winner game',     4);
+
+insert into game_to_location (gl_game_id, gl_location_id) values
+(2, 1),
+
+(3, 2),
+
+(4, 3);

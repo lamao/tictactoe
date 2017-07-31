@@ -25,3 +25,11 @@ create table game (
   foreign key (gm_state_id) references state (st_id),
   foreign key (gm_snapshot_id) references snapshot (sn_id)
 );
+
+create table game_to_location (
+  gl_game_id bigint not null,
+  gl_location_id bigint not null,
+  unique (gl_game_id, gl_location_id),
+  foreign key (gl_game_id) references game (gm_id),
+  foreign key (gl_location_id) references location (lc_id)
+);

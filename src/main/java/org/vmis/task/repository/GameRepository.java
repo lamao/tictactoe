@@ -15,4 +15,6 @@ public interface GameRepository {
     long add(Game game);
 
     void update(Game game);
+
+    void addTurn(Long id, Long locationId);
 }

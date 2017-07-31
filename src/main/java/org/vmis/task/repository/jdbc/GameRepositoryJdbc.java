@@ -39,6 +39,8 @@ public class GameRepositoryJdbc implements GameRepository {
     private static final String SELECT_BY_ID = String.format("%s where gm_id = :id", QUERY_FULL);
     private static final String INSERT_ADD = "insert into game (gm_title, gm_state_id, gm_snapshot_id) values (:title, :state_id, :snapshot_id)";
     private static final String UPDATE_ONE = "update game set gm_title = :title, gm_state_id = :state_id where gm_id = :id";
+    // TODO: Move to separate repository
+    private static final String INSERT_ADD_TURN = "insert into game_to_location (gl_game_id, gl_location_id) values (:gameId, :locationId)";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -87,5 +89,14 @@ public class GameRepositoryJdbc implements GameRepository {
         parameters.put("state_id", game.getState().getId());
 
         jdbcTemplate.update(UPDATE_ONE, new MapSqlParameterSource(parameters));
+    }
+
+    @Override
+    public void addTurn(Long id, Long locationId) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("gameId", id);
+        parameters.put("locationId", locationId);
+
+        jdbcTemplate.update(INSERT_ADD_TURN, new MapSqlParameterSource(parameters));
     }
 }
