@@ -1,5 +1,6 @@
 package org.vmis.task.service.impl;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vmis.task.model.Game;
@@ -15,6 +16,7 @@ import org.vmis.task.service.GameService;
 import org.vmis.task.service.SnapshotService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
