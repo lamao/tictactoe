@@ -7,4 +7,4 @@ Used technologies:
 
  - Java 8, Spring, Jdbc, Spring Boot 
 
- - HTML, CSS, Angular JS, Underscore.js
+ - HTML, CSS, Angular JS, Underscore.js, Bootstrap
