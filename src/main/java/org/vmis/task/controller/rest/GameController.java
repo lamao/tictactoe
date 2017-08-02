@@ -24,6 +24,7 @@ import org.vmis.task.model.Game;
 import org.vmis.task.model.Location;
 import org.vmis.task.model.State;
 import org.vmis.task.service.GameService;
+import org.vmis.task.service.LocationService;
 
 /**
  * @author Vycheslav Mischeryakov (vmischeryakov@gmail.com)
@@ -33,6 +34,7 @@ import org.vmis.task.service.GameService;
 public class GameController {
 
     private GameService gameService;
+    private LocationService locationService;
 
     private GameBriefDtoConverter briefDtoConverter;
     private GameFullDtoConverter fullDtoConverter;
@@ -44,11 +46,14 @@ public class GameController {
     @Autowired
     public GameController(
         GameService gameService,
+        LocationService locationService,
         GameBriefDtoConverter briefDtoConverter,
         GameFullDtoConverter fullDtoConverter,
         LocationDtoConverter locationDtoConverter,
         StateDtoConverter stateDtoConverter) {
         this.gameService = gameService;
+        this.locationService = locationService;
+
         this.briefDtoConverter = briefDtoConverter;
         this.fullDtoConverter = fullDtoConverter;
         this.locationDtoConverter = locationDtoConverter;
@@ -83,5 +88,13 @@ public class GameController {
         State state = gameService.makeTurn(id, location);
         StateDto result = stateDtoConverter.toDto(state);
         return ResponseEntity.ok(result);
-    };
+    }
+
+    // TODO: Introduce History & HistoryItem entity
+    @GetMapping(value = "{id}/turns", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getTurnHistory(@PathVariable Long id) {
+        List<Location> turns = locationService.getTurnHistory(id);
+        List<LocationDto> result = turns.stream().map(locationDtoConverter::toDto).collect(Collectors.toList());
+        return ResponseEntity.ok(result);
+    }
 }

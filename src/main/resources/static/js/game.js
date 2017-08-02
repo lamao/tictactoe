@@ -40,6 +40,7 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
   $http.get('/api/game/' + $routeParams.id).then(function (response) {
     $scope.item = response.data;
     $scope.nextTurnSymbol = getNextTurnSymbol();
+    $scope.flags = {};
 
     $scope.isLastTurn = function(x, y) {
       var lastTurn = $scope.item.lastTurn;
@@ -62,6 +63,9 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
               item.lastTurn = body;
               item.snapshot[y][x] = $scope.nextTurnSymbol;
               $scope.nextTurnSymbol = getNextTurnSymbol();
+              if ($scope.flags.showHistory) {
+                $scope.turns.push(body);
+              }
 
               var newState = response.data;
               $scope.item.state = newState;
@@ -73,6 +77,17 @@ app.controller('gameCardController', ['$scope', '$http', '$q', '$routeParams', '
         }
       }
     };
+
+    $scope.onShowHistory = function() {
+      $http.get('/api/game/' + $routeParams.id + '/turns').then(function(response) {
+        $scope.turns = response.data;
+        $scope.flags.showHistory = true;
+      });
+    };
+
+    $scope.onHideHistory = function() {
+      $scope.flags.showHistory = false;
+    }
   });
 
   // TODO: return from BE
